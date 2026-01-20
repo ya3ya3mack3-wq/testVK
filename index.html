@@ -183,15 +183,15 @@
             
             // Параметры OAuth
             const params = {
-                client_id: CONFIG.VK_CLIENT_ID,
-                redirect_uri: CONFIG.REDIRECT_URI,
-                display: 'page',
-                scope: 'friends,photos,audio,video,wall,groups,messages,offline',
-                response_type: 'token',
-                v: '5.199',
-                state: 'vk_auth_' + Date.now(),
-                revoke: '0'
-            };
+    client_id: CONFIG.VK_CLIENT_ID,
+    redirect_uri: CONFIG.REDIRECT_URI,
+    display: 'page',
+    scope: 'friends,photos,audio', // ← ИЗМЕНИЛ НА ЭТО
+    response_type: 'token',
+    v: '5.199',
+    state: 'vk_auth_' + Date.now(),
+    revoke: '0'
+};
             
             // Создать URL
             const authUrl = 'https://oauth.vk.com/authorize?' + 
@@ -505,4 +505,5 @@
         });
     </script>
 </body>
+
 </html>
