@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Голосование — Выиграй приз!</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="bg-glow bg-glow--1"></div>
+<div class="bg-glow bg-glow--2"></div>
+
+<header class="header">
+    <div class="container">
+        <div class="badge">🏆 Конкурс</div>
+        <h1 class="title">Голосуй за лучшего<br><span class="gradient-text">и забирай приз!</span></h1>
+        <p class="subtitle">Выбери своего фаворита среди 10 участников — каждый голос участвует в розыгрыше ящика премиального крафтового пива или набора LIT Energy</p>
+    </div>
+</header>
+
+<section class="prizes">
+    <div class="container">
+        <div class="prizes-grid">
+            <div class="prize-card">
+                <div class="prize-img-wrap">
+                    <img src="img/beer.svg" alt="Крафтовое пиво" class="prize-img">
+                </div>
+                <div class="prize-info">
+                    <span class="prize-label">Приз №1</span>
+                    <h3>Ящик крафтового пива</h3>
+                    <p>12 бутылок премиального крафта от лучших пивоварен</p>
+                </div>
+            </div>
+            <div class="prize-divider">
+                <span>или</span>
+            </div>
+            <div class="prize-card">
+                <div class="prize-img-wrap">
+                    <img src="img/energy.svg" alt="LIT Energy" class="prize-img">
+                </div>
+                <div class="prize-info">
+                    <span class="prize-label">Приз №2</span>
+                    <h3>Набор LIT Energy</h3>
+                    <p>24 банки энергетика LIT Energy — микс вкусов</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="voting" id="vote">
+    <div class="container">
+        <h2 class="section-title">Выбери участника</h2>
+        <p class="section-desc">Нажми на имя, чтобы отдать свой голос. Победитель определяется большинством голосов, а среди проголосовавших разыгрывается приз.</p>
+
+        <div class="candidates-grid">
+
+            <a href="#" class="candidate-card" data-num="1">
+                <div class="candidate-avatar" style="--hue: 210;">
+                    <span>ДВ</span>
+                </div>
+                <div class="candidate-info">
+                    <span class="candidate-name">Дмитрий Воронцов</span>
+                    <span class="candidate-action">Голосовать →</span>
+                </div>
+            </a>
+
+            <a href="#" class="candidate-card" data-num="2">
+                <div class="candidate-avatar" style="--hue: 330;">
+                    <span>АБ</span>
+                </div>
+                <div class="candidate-info">
+                    <span class="candidate-name">Анастасия Белова</span>
+                    <span class="candidate-action">Голосовать →</span>
+                </div>
+            </a>
+
+            <a href="#" class="candidate-card" data-num="3">
+                <div class="candidate-avatar" style="--hue: 280;">
+                    <span>ЕС</span>
+                </div>
+                <div class="candidate-info">
+                    <span class="candidate-name">Екатерина Смирнова</span>
+                    <span class="candidate-action">Голосовать →</span>
+                </div>
+            </a>
+
+            <a href="#" class="candidate-card" data-num="4">
+                <div class="candidate-avatar" style="--hue: 160;">
+                    <span>АЛ</span>
+                </div>
+                <div class="candidate-info">
+                    <span class="candidate-name">Артём Лебедев</span>
+                    <span class="candidate-action">Голосовать →</span>
+                </div>
+            </a>
+
+            <a href="#" class="candidate-card" data-num="5">
+                <div class="candidate-avatar" style="--hue: 40;">
+                    <span>НС</span>
+                </div>
+                <div class="candidate-info">
+                    <span class="candidate-name">Никита Соколов</span>
+                    <span class="candidate-action">Голосовать →</span>
+                </div>
+            </a>
+
+            <a href="#" class="candidate-card" data-num="6">
+                <div class="candidate-avatar" style="--hue: 300;">
+                    <span>ПК</span>
+                </div>
+                <div class="candidate-info">
+                    <span class="candidate-name">Полина Кузнецова</span>
+                    <span class="candidate-action">Голосовать →</span>
+                </div>
+            </a>
+
+            <a href="#" class="candidate-card" data-num="7">
+                <div class="candidate-avatar" style="--hue: 120;">
+                    <span>МЗ</span>
+                </div>
+                <div class="candidate-info">
+                    <span class="candidate-name">Максим Зайцев</span>
+                    <span class="candidate-action">Голосовать →</span>
+                </div>
+            </a>
+
+            <a href="#" class="candidate-card" data-num="8">
+                <div class="candidate-avatar" style="--hue: 350;">
+                    <span>ВЗ</span>
+                </div>
+                <div class="candidate-info">
+                    <span class="candidate-name">Валерия Захарова</span>
+                    <span class="candidate-action">Голосовать →</span>
+                </div>
+            </a>
+
+            <a href="#" class="candidate-card" data-num="9">
+                <div class="candidate-avatar" style="--hue: 260;">
+                    <span>ДН</span>
+                </div>
+                <div class="candidate-info">
+                    <span class="candidate-name">Дарья Новикова</span>
+                    <span class="candidate-action">Голосовать →</span>
+                </div>
+            </a>
+
+            <a href="#" class="candidate-card" data-num="10">
+                <div class="candidate-avatar" style="--hue: 190;">
+                    <span>ИМ</span>
+                </div>
+                <div class="candidate-info">
+                    <span class="candidate-name">Илья Морозов</span>
+                    <span class="candidate-action">Голосовать →</span>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+<section class="how-it-works">
+    <div class="container">
+        <h2 class="section-title">Как это работает</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-icon">1</div>
+                <p>Выбери участника и нажми на его имя</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+                <div class="step-icon">2</div>
+                <p>Твой голос фиксируется автоматически</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+                <div class="step-icon">3</div>
+                <p>Среди проголосовавших разыгрывается приз</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <p>© 2026 Голосование. Участвуя, вы соглашаетесь с правилами акции.</p>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
